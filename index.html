@@ -4,114 +4,110 @@
     <meta charset="UTF-8">
     <title>Simple Simon</title>
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="simon-stylesheet.css">
 
-    <style>
-        body {
-            background-color: lightblue;
-        }
-        h1{
-            text-align: center;
-        }
-        .wrapper{
-            margin: auto;
-            position: relative;
-        }
-        .sqr{
-            width: 250px;
-            height: 250px;
-            border: double;
-            border-color: black;
-            margin: 1%;
-        }
-        #topcontainer{
-            float: left;
-        }
-        #btmcontainer {
-            float: left;
-        }
-        #topl{
-            background-color: green;
-            border-top-left-radius: 300px;
-        }
-        #topr{
-            background-color: red;
-            border-bottom-left-radius: 300px;
-        }
-        #btml{
-            background-color: yellow;
-            border-top-right-radius: 300px;
-        }
-        #btmr{
-            background-color: blue;
-            border-bottom-right-radius: 300px;
-        }
-        #start{
-            background-color: black;
-            color: white;
-            width: 70px;
-            height: 70px;
-            padding: 15px;
-        }
-    </style>
 </head>
 <body>
 <h1>Simple Simon</h1>
 <div class="wrapper">
+    <div class="level"><h2>Level: 1</h2></div>
+    <div class="score"><h2>Score: 0</h2></div>
     <div class="background">
-        <button id="start">START</button>
-    <div id="topcontainer">
-        <div class="sqr" id="topl" data-tile="1">
-            <audio src="dong-1.wav"></audio>
+        <div id="topcontainer">
+            <button id="start">START</button>
+            <div class="sqr" id="topl" data-tile="1">
+                <audio src="dong-1.wav"></audio>
+            </div>
+
+            <div class="sqr" id="topr" data-tile="2">
+                <audio src="the-ding.wav"></audio>
+            </div>
         </div>
 
-        <div class="sqr" id="topr" data-tile="2">
-            <audio src="the-ding.wav"></audio>
+        <div id="btmcontainer">
+            <div class="sqr" id="btml" data-tile="3">
+                <audio src="click5.wav"></audio>
+            </div>
+            <div class="sqr" id="btmr" data-tile="4">
+                <audio src="door-close-inside.wav"></audio>
+            </div>
         </div>
-    </div>
-
-    <div id="btmcontainer">
-        <div class="sqr" id="btml" data-tile="3">
-            <audio src="click5.wav"></audio>
-        </div>
-        <div class="sqr" id ="btmr" data-tile="4">
-            <audio src="door-close-inside.wav"></audio>
-        </div>
-    </div>
     </div>
 </div>
 
 <!--JQuery info -->
 
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
 <script>
+    $(document).ready(function () {
 
-    function newRound() {
-        var sequence = [1,2,1]; //red, green, red
-        animate(sequence);
-    }
 
-    function animate(sequence) {
-        var i = 0;
-        var interval = setInterval(function() {
-            lightUp(sequence[i]);
+        var sequence = [];
 
-            i++;
-            if (i >= sequence.length) {
-                clearInterval(interval);
-            }
-        }, 600);
-    }
+        function newRound() {
+            sequence.push(Math.floor(Math.random() * 4) + 1)
+            animate(sequence);
+        }
 
-    function lightup(tile) {
-        var $tile = $('[data-tile=' + tile + ']').addClass('lit');
-        window.setTimeout(function() {
-            $tile.removeClass('lit');
-        }, 300);
+        //light up function//
 
-    }
+        function animate(sequence) {
+            var i = 0;
+            var interval = setInterval(function () {
+                lightUp(sequence[i]);
 
+                i++;
+                if (i >= sequence.length) {
+                    userInput();
+                    clearInterval(interval);
+                }
+            }, 600);
+        }
+
+        function lightUp(tile) {
+            var btn = $('[data-tile=' + tile + ']');
+            btn.addClass('lit');
+            setTimeout(function () {
+                btn.removeClass('lit');
+            }, 300);
+
+        }
+
+        //game function//
+
+        function userInput() {
+            var i =0;
+            $(".sqr").on('click', function () {
+                console.log($(this));
+                if($(this).attr("data-tile") == sequence[i]){
+                    if(i == sequence.length -1){
+                        newRound();
+                        $(".sqr").off("click");
+                    }
+                    i++;
+                }else{
+                    $(".sqr").off("click");
+                    sequence = [];
+                    alert("Try Again!");
+                    $('#start').click(function () {
+                        newRound();
+                        $('#start').off('click');
+                });
+                }
+
+            });
+        }
+
+        $('#start').on('click', function () {
+            newRound();
+            $('#start').off('click');
+        });
+
+    })
 
 </script>
 
