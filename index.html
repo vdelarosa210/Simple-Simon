@@ -49,10 +49,10 @@
 
 
         var sequence = [];
-        var level = 0
+        var level = '';
 
         function newRound() {
-            sequence.push(Math.floor(Math.random() * 4) + 1)
+            sequence.push(Math.floor(Math.random() * 4) + 1);
             animate(sequence);
         }
 
@@ -70,7 +70,6 @@
                 }
             }, 600);
         }
-
         function lightUp(tile) {
             var btn = $('[data-tile=' + tile + ']');
             btn.children().get(0).play();
@@ -78,7 +77,6 @@
             setTimeout(function () {
                 btn.removeClass('lit');
             }, 300);
-
         }
 
         //game function//
@@ -99,24 +97,21 @@
                     $(".sqr").off("click");
                     sequence = [];
                     alert("Try Again!");
+                    level="";
+                    $(".level").children().html("Level: " + level);
                     $('#start').click(function () {
                         newRound();
                         $('#start').off('click');
                 });
                 }
-
             });
         }
-
         $('#start').on('click', function () {
             newRound();
 
             $('#start').off('click');
             console.log('test')
         });
-
-
-
     })
 
 </script>
