@@ -12,11 +12,11 @@
 <body>
 <h1>Simple Simon</h1>
 <div class="wrapper">
+
     <div class="level"><h2>Level: 1</h2></div>
-    <div class="score"><h2>Score: 0</h2></div>
     <div class="background">
         <div id="topcontainer">
-            <button id="start">START</button>
+
             <div class="sqr" id="topl" data-tile="1">
                 <audio src="dong-1.wav"></audio>
             </div>
@@ -25,6 +25,7 @@
                 <audio src="the-ding.wav"></audio>
             </div>
         </div>
+        <button id="start">START</button>
 
         <div id="btmcontainer">
             <div class="sqr" id="btml" data-tile="3">
@@ -43,10 +44,12 @@
         integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
 <script>
+    "use strict";
     $(document).ready(function () {
 
 
         var sequence = [];
+        var level = 0
 
         function newRound() {
             sequence.push(Math.floor(Math.random() * 4) + 1)
@@ -70,6 +73,7 @@
 
         function lightUp(tile) {
             var btn = $('[data-tile=' + tile + ']');
+            btn.children().get(0).play();
             btn.addClass('lit');
             setTimeout(function () {
                 btn.removeClass('lit');
@@ -87,6 +91,8 @@
                     if(i == sequence.length -1){
                         newRound();
                         $(".sqr").off("click");
+                        level ++;
+                        $(".level").children().html("Level: " + level);
                     }
                     i++;
                 }else{
@@ -104,8 +110,12 @@
 
         $('#start').on('click', function () {
             newRound();
+
             $('#start').off('click');
+            console.log('test')
         });
+
+
 
     })
 

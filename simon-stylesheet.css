@@ -60,13 +60,16 @@ h1 {
     text-align: center;
     position: absolute;
     top: 40%;
+    z-index: 2;
 }
 .lit {
     opacity: 1;
 }
-.level, .score {
+.level{
     width: 50%;
-    float: left;
     text-align: center;
-
+    z-index: 2;
+    color: white;
+    position: absolute;
+    top: 60px;
 }
